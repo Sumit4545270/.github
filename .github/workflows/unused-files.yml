@@ -25,7 +25,6 @@ jobs:
           while IFS= read -r file; do
             last_date=$(git log -1 --format="%ad" --date=short -- "$file")
             last_ts=$(git log -1 --format="%ct" -- "$file")
-
             ten_years_ago=$(date -d "10 years ago" +%s)
 
             if [ "$last_ts" -lt "$ten_years_ago" ]; then
@@ -36,9 +35,14 @@ jobs:
 
       - name: Update README
         run: |
+          # Add markers to README if missing
+          if ! grep -q "<!-- UNUSED-FILES-START -->" README.md; then
+            printf "\n<!-- UNUSED-FILES-START -->\n<!-- UNUSED-FILES-END -->\n" >> README.md
+          fi
+
+          # Replace section with new content
           sed -i '/<!-- UNUSED-FILES-START -->/,/<!-- UNUSED-FILES-END -->/c\
-<!-- UNUSED-FILES-START -->\n'"$(cat UNUSED.md)"'\n<!-- UNUSED-FILES-END -->' README.md || \
-          printf "\n\n<!-- UNUSED-FILES-START -->\n%s\n<!-- UNUSED-FILES-END -->\n" "$(cat UNUSED.md)" >> README.md
+<!-- UNUSED-FILES-START -->\n'"$(cat UNUSED.md)"'\n<!-- UNUSED-FILES-END -->' README.md
 
       - name: Commit updates
         run: |
