@@ -35,12 +35,10 @@ jobs:
 
       - name: Update README
         run: |
-          # Add markers if missing
           if ! grep -q "<!-- UNUSED-FILES-START -->" README.md; then
             printf "\n<!-- UNUSED-FILES-START -->\n<!-- UNUSED-FILES-END -->\n" >> README.md
           fi
 
-          # Replace the section
           sed -i '/<!-- UNUSED-FILES-START -->/,/<!-- UNUSED-FILES-END -->/c\
 <!-- UNUSED-FILES-START -->\n'"$(cat UNUSED.md)"'\n<!-- UNUSED-FILES-END -->' README.md
 
@@ -51,3 +49,4 @@ jobs:
           git add README.md UNUSED.md
           git commit -m "Updated unused files list" || echo "No changes"
           git push
+``
