@@ -35,12 +35,12 @@ jobs:
 
       - name: Update README
         run: |
-          # Add markers to README if missing
+          # Add markers if missing
           if ! grep -q "<!-- UNUSED-FILES-START -->" README.md; then
             printf "\n<!-- UNUSED-FILES-START -->\n<!-- UNUSED-FILES-END -->\n" >> README.md
           fi
 
-          # Replace section with new content
+          # Replace the section
           sed -i '/<!-- UNUSED-FILES-START -->/,/<!-- UNUSED-FILES-END -->/c\
 <!-- UNUSED-FILES-START -->\n'"$(cat UNUSED.md)"'\n<!-- UNUSED-FILES-END -->' README.md
 
