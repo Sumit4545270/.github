@@ -1,25 +1,24 @@
-name: Cleanup Checker
+name: Repo Cleanup
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 0"   # runs every Sunday
-  workflow_dispatch:       # manual run button
+    - cron: "0 0 * * 0"
 
 jobs:
-  scan:
+  check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Run script
+      - name: Run checker
         run: node scripts/cleanup-check.js
 
-      - name: Commit report
+      - name: Save report
         run: |
           git config user.name "bot"
           git config user.email "bot@example.com"
           git add unused-files.json
-          git commit -m "Update unused files" || echo "No changes"
+          git commit -m "cleanup report" || echo "no changes"
           git push
